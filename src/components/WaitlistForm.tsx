@@ -1,39 +1,32 @@
-
-import { useState } from "react";
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
+import { useWaitlistForm } from "@/hooks/useWaitlistForm";
 
 const WaitlistForm = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    gradeLevel: "",
-    email: "",
-    testType: ""
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { state, updateField, setLoading, setSubmitted } = useWaitlistForm();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    setIsSubmitted(true);
-    setIsLoading(false);
+    setSubmitted(true);
+    setLoading(false);
     toast.success("Welcome to the waitlist! We'll be in touch soon.");
-  };
+  }, [setLoading, setSubmitted]);
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const handleInputChange = useCallback((field: string, value: string) => {
+    updateField(field as any, value);
+  }, [updateField]);
 
-  if (isSubmitted) {
+  if (state.isSubmitted) {
     return (
       <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,7 +90,7 @@ const WaitlistForm = () => {
                   <Input
                     id="firstName"
                     type="text"
-                    value={formData.firstName}
+                    value={state.firstName}
                     onChange={(e) => handleInputChange("firstName", e.target.value)}
                     className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm touch-manipulation"
                     placeholder="Enter your first name"
@@ -109,7 +102,7 @@ const WaitlistForm = () => {
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
                     Grade Level
                   </Label>
-                  <Select value={formData.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)}>
+                  <Select value={state.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)}>
                     <SelectTrigger className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm">
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
@@ -131,7 +124,7 @@ const WaitlistForm = () => {
                 <Input
                   id="email"
                   type="email"
-                  value={formData.email}
+                  value={state.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm touch-manipulation"
                   placeholder="Enter your email address"
@@ -143,7 +136,7 @@ const WaitlistForm = () => {
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
-                <Select value={formData.testType} onValueChange={(value) => handleInputChange("testType", value)}>
+                <Select value={state.testType} onValueChange={(value) => handleInputChange("testType", value)}>
                   <SelectTrigger className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm">
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
@@ -159,10 +152,10 @@ const WaitlistForm = () => {
               {/* Premium CTA button - mobile responsive */}
               <Button 
                 type="submit"
-                disabled={isLoading}
-                className="w-full h-14 sm:h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl sm:rounded-2xl text-lg sm:text-xl font-semibold shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 group border-0 mt-6 sm:mt-8 touch-manipulation"
+                disabled={state.isLoading}
+                className="w-full h-14 sm:h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl sm:rounded-2xl text-lg sm:text-xl font-semibold shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 group border-0 mt-6 sm:mt-8 touch-manipulation will-change-transform"
               >
-                {isLoading ? (
+                {state.isLoading ? (
                   <div className="flex items-center">
                     <div className="w-5 h-5 sm:w-6 sm:h-6 border-3 border-white border-t-transparent rounded-full animate-spin mr-3" />
                     Joining the waitlist...

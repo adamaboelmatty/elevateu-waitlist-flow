@@ -1,7 +1,8 @@
 
 import { Zap, Brain, Target, TrendingUp } from "lucide-react";
+import { memo } from "react";
 
-const Features = () => {
+const Features = memo(() => {
   const features = [
     {
       icon: Zap,
@@ -47,11 +48,11 @@ const Features = () => {
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="group relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-white hover:from-purple-50 hover:to-blue-50 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/10 border border-slate-100 hover:border-purple-200 hover:-translate-y-2 touch-manipulation"
+                className="group relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-white hover:from-purple-50 hover:to-blue-50 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-500/10 border border-slate-100 hover:border-purple-200 hover:-translate-y-2 touch-manipulation will-change-transform"
               >
                 {/* Elegant icon container - mobile responsive */}
                 <div className="relative mb-6">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg will-change-transform">
                     <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
                   {/* Subtle glow effect */}
@@ -74,6 +75,8 @@ const Features = () => {
       </div>
     </section>
   );
-};
+});
+
+Features.displayName = "Features";
 
 export default Features;

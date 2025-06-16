@@ -1,13 +1,14 @@
 
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { memo, useCallback } from "react";
 
-const Hero = () => {
-  const scrollToWaitlist = () => {
+const Hero = memo(() => {
+  const scrollToWaitlist = useCallback(() => {
     document.getElementById('waitlist')?.scrollIntoView({
       behavior: 'smooth'
     });
-  };
+  }, []);
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
@@ -41,7 +42,7 @@ const Hero = () => {
             <Button 
               onClick={scrollToWaitlist} 
               size="lg" 
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 animate-fade-in group border-0 font-medium w-full sm:w-auto min-h-[56px] touch-manipulation"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-2xl shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 animate-fade-in group border-0 font-medium w-full sm:w-auto min-h-[56px] touch-manipulation will-change-transform"
             >
               👉 Join the Waitlist
               <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300" />
@@ -52,7 +53,7 @@ const Hero = () => {
           <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-slate-500 px-4 sm:px-0">
             <div className="flex -space-x-2 sm:-space-x-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full border-2 border-white shadow-lg"></div>
+                <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full border-2 border-white shadow-lg will-change-transform"></div>
               ))}
             </div>
             <div className="text-sm font-medium text-center sm:text-left">
@@ -63,6 +64,8 @@ const Hero = () => {
       </div>
     </section>
   );
-};
+});
+
+Hero.displayName = "Hero";
 
 export default Hero;

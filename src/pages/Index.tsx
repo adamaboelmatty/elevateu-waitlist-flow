@@ -2,7 +2,7 @@
 import Hero from "@/components/Hero";
 import DemoPreview from "@/components/DemoPreview";
 import Features from "@/components/Features";
-import WaitlistForm from "@/components/WaitlistForm";
+import LazyWaitlistForm from "@/components/LazyWaitlistForm";
 
 const Index = () => {
   return (
@@ -10,7 +10,7 @@ const Index = () => {
       <Hero />
       <DemoPreview />
       <Features />
-      <WaitlistForm />
+      <LazyWaitlistForm />
     </div>
   );
 };
