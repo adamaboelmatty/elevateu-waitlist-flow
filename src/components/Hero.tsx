@@ -1,14 +1,12 @@
-
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 const Hero = () => {
   const scrollToWaitlist = () => {
-    document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('waitlist')?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-white">
+  return <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-white">
       <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(147,51,234,0.02)_50%,transparent_75%)] pointer-events-none" />
       
       <div className="container mx-auto px-4 py-20 lg:py-32">
@@ -28,22 +26,14 @@ const Hero = () => {
             Smarter quizzes. Instant explanations. Frustration-free prep.
           </p>
           
-          <Button 
-            onClick={scrollToWaitlist}
-            size="lg" 
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in group"
-          >
+          <Button onClick={scrollToWaitlist} size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in group">
             👉 Join the Waitlist
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
           
-          <div className="mt-12 text-sm text-slate-500">
-            Join 10,000+ students already on the waitlist
-          </div>
+          <div className="mt-12 text-sm text-slate-500">Join 100+ students already on the waitlist</div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
