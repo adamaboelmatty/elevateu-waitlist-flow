@@ -1,39 +1,67 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 const Hero = () => {
   const scrollToWaitlist = () => {
     document.getElementById('waitlist')?.scrollIntoView({
       behavior: 'smooth'
     });
   };
-  return <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-white">
-      <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(147,51,234,0.02)_50%,transparent_75%)] pointer-events-none" />
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-purple-50/30">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),transparent)] pointer-events-none" />
       
-      <div className="container mx-auto px-4 py-20 lg:py-32">
+      <div className="container mx-auto px-4 py-24 lg:py-40">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-purple-50 rounded-full text-purple-700 text-sm font-medium mb-8 animate-fade-in">
-            ✨ Now in Beta — Early Access Available
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight animate-fade-in">
-            AI-Powered SAT/ACT Prep —{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Built for Gen Z
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[0.9]">
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+              AI-Powered
+            </span>
+            <br />
+            <span className="text-slate-900">
+              SAT/ACT Prep
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-            Smarter quizzes. Instant explanations. Frustration-free prep.
+          <p className="text-xl md:text-2xl text-slate-600 mb-4 font-medium">
+            10x Faster, Smarter, Simpler.
           </p>
           
-          <Button onClick={scrollToWaitlist} size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in group">
-            👉 Join the Waitlist
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <p className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto">
+            Join the early testers shaping the future of test prep.
+          </p>
           
-          <div className="mt-12 text-sm text-slate-500">Join 100+ students already on the waitlist</div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Button 
+              onClick={scrollToWaitlist} 
+              size="lg" 
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 group"
+            >
+              Apply for Early Access
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-white"></div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-white"></div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 border-2 border-white"></div>
+              </div>
+              <span className="text-slate-500 text-sm">127 students already applied</span>
+            </div>
+          </div>
+          
+          <div className="mt-16">
+            <div className="w-6 h-6 mx-auto text-slate-400 animate-bounce">
+              ↓
+            </div>
+          </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Hero;
