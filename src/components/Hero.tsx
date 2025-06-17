@@ -1,9 +1,9 @@
-
 import { ArrowRight } from "lucide-react";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 import { FloatingElement, PulsingDot, MagneticButton } from "@/components/ui/floating-elements";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { memo, useCallback } from "react";
+import { useTextRotation } from "@/hooks/useTextRotation";
 
 const Hero = memo(() => {
   const scrollToWaitlist = useCallback(() => {
@@ -11,6 +11,19 @@ const Hero = memo(() => {
       behavior: 'smooth'
     });
   }, []);
+
+  const rotatingTexts = [
+    "Smarter quizzes. Instant explanations. Frustration-free prep.",
+    "Personalized practice. Real-time feedback. Score improvements.",
+    "Adaptive learning. Expert insights. Confidence building.",
+    "Interactive lessons. Progress tracking. Success guaranteed."
+  ];
+
+  const { currentText, isAnimating } = useTextRotation({
+    texts: rotatingTexts,
+    interval: 3500,
+    initialDelay: 2000
+  });
 
   const studentAvatars = [
     {
@@ -71,9 +84,13 @@ const Hero = memo(() => {
             </span>
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-600 mb-12 sm:mb-16 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in px-2 sm:px-0">
-            Smarter quizzes. Instant explanations. Frustration-free prep.
-          </p>
+          <div className="h-20 sm:h-24 md:h-28 lg:h-32 flex items-center justify-center mb-12 sm:mb-16">
+            <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light px-2 sm:px-0 transition-all duration-300 ${
+              isAnimating ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+            }`}>
+              {currentText}
+            </p>
+          </div>
           
           <div className="animate-fade-in px-4 sm:px-0">
             <MagneticButton>
