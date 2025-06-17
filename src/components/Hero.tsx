@@ -1,9 +1,12 @@
+
 import { ArrowRight } from "lucide-react";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 import { FloatingElement, PulsingDot, MagneticButton } from "@/components/ui/floating-elements";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { memo, useCallback } from "react";
 import { useTextRotation } from "@/hooks/useTextRotation";
+import { useTypewriter } from "@/hooks/useTypewriter";
+import { useRotatingKeywords } from "@/hooks/useRotatingKeywords";
 
 const Hero = memo(() => {
   const scrollToWaitlist = useCallback(() => {
@@ -23,6 +26,22 @@ const Hero = memo(() => {
     texts: rotatingTexts,
     interval: 3500,
     initialDelay: 2000
+  });
+
+  // Rotating keywords for the main headline
+  const keywords = ["Revolutionary", "Intelligent", "Adaptive", "Cutting-Edge"];
+  const { currentKeyword, isAnimating: keywordAnimating } = useRotatingKeywords({
+    keywords,
+    interval: 2500,
+    initialDelay: 500
+  });
+
+  // Typewriter effect for the gradient text
+  const gradientText = "Built for Gen Z";
+  const { displayText: typewriterText, isComplete } = useTypewriter({
+    text: gradientText,
+    delay: 1500,
+    speed: 120
   });
 
   const studentAvatars = [
@@ -78,9 +97,17 @@ const Hero = memo(() => {
           </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-bold text-slate-900 mb-6 sm:mb-8 leading-[0.9] tracking-tight animate-fade-in px-2 sm:px-0">
+            <span className={`inline-block transition-all duration-300 ${
+              keywordAnimating ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'
+            }`}>
+              {currentKeyword}
+            </span>{" "}
             AI-Powered SAT/ACT Prep —{" "}
-            <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent animate-[gradient_3s_ease-in-out_infinite]">
-              Built for Gen Z
+            <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent animate-[gradient_3s_ease-in-out_infinite] relative">
+              {typewriterText}
+              {!isComplete && (
+                <span className="animate-pulse text-purple-600 ml-1">|</span>
+              )}
             </span>
           </h1>
           
