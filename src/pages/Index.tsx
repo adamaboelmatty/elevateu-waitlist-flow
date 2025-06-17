@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import DemoPreview from "@/components/DemoPreview";
 import Features from "@/components/Features";
 import LazyWaitlistForm from "@/components/LazyWaitlistForm";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <DemoPreview />
       <Features />
       <LazyWaitlistForm />
+      <Footer />
     </div>
   );
 };
