@@ -1,6 +1,8 @@
-import { useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
+import { useCallback, useState } from "react";
+import { EnhancedButton } from "@/components/ui/enhanced-button";
+import { AnimatedInput } from "@/components/ui/animated-input";
+import { ProgressIndicator } from "@/components/ui/progress-indicator";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
@@ -9,34 +11,99 @@ import { useWaitlistForm } from "@/hooks/useWaitlistForm";
 
 const WaitlistForm = () => {
   const { state, updateField, setLoading, setSubmitted } = useWaitlistForm();
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [successFields, setSuccessFields] = useState<Record<string, boolean>>({});
+
+  const formSteps = ["Name", "Grade", "Email", "Test"];
+  const currentStep = Object.values(state).filter(value => value && typeof value === 'string').length - 2; // Subtract isSubmitted and isLoading
+
+  const validateField = useCallback((field: string, value: string) => {
+    let error = "";
+    
+    switch (field) {
+      case "firstName":
+        if (!value.trim()) error = "First name is required";
+        else if (value.length < 2) error = "Name must be at least 2 characters";
+        break;
+      case "email":
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!value.trim()) error = "Email is required";
+        else if (!emailRegex.test(value)) error = "Please enter a valid email";
+        break;
+      case "gradeLevel":
+        if (!value) error = "Please select your grade level";
+        break;
+      case "testType":
+        if (!value) error = "Please select your test type";
+        break;
+    }
+    
+    setValidationErrors(prev => ({ ...prev, [field]: error }));
+    setSuccessFields(prev => ({ ...prev, [field]: !error && value.length > 0 }));
+    
+    return !error;
+  }, []);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate all fields
+    const fields = ["firstName", "email", "gradeLevel", "testType"];
+    const isValid = fields.every(field => validateField(field, state[field as keyof typeof state] as string));
+    
+    if (!isValid) return;
+    
     setLoading(true);
     
-    // Simulate API call
+    // Simulate API call with progress
     await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Create confetti effect
+    const confetti = document.createElement('div');
+    confetti.innerHTML = '🎉'.repeat(20);
+    confetti.className = 'fixed inset-0 pointer-events-none z-50 flex items-center justify-center text-4xl animate-pulse';
+    document.body.appendChild(confetti);
+    
+    setTimeout(() => document.body.removeChild(confetti), 2000);
     
     setSubmitted(true);
     setLoading(false);
     toast.success("Welcome to the waitlist! We'll be in touch soon.");
-  }, [setLoading, setSubmitted]);
+  }, [state, validateField, setLoading, setSubmitted]);
 
   const handleInputChange = useCallback((field: string, value: string) => {
     updateField(field as any, value);
-  }, [updateField]);
+    if (value) {
+      setTimeout(() => validateField(field, value), 300); // Debounced validation
+    }
+  }, [updateField, validateField]);
 
   if (state.isSubmitted) {
     return (
       <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Success animation - mobile responsive */}
+            {/* Enhanced success animation */}
             <div className="relative mb-8 sm:mb-12">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl">
-                <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
+              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-[bounce_1s_ease-in-out_3]">
+                <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-white animate-[spin_0.5s_ease-in-out]" />
               </div>
               <div className="absolute inset-0 w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur-xl opacity-30 mx-auto animate-pulse"></div>
+              
+              {/* Floating celebration elements */}
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute animate-[float_2s_ease-in-out_infinite] text-2xl"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${10 + (i % 2) * 20}%`,
+                    animationDelay: `${i * 0.3}s`
+                  }}
+                >
+                  {['🎉', '✨', '🚀', '⭐', '🎊', '💫'][i]}
+                </div>
+              ))}
             </div>
             
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight px-2 sm:px-0">
@@ -66,34 +133,39 @@ const WaitlistForm = () => {
     <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
-          {/* Premium form header - mobile responsive */}
+          {/* Enhanced form header with progress */}
           <div className="text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-purple-700 text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-purple-100">
+            <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-purple-700 text-sm font-medium mb-6 shadow-lg border border-purple-100 animate-fade-in">
               🔥 Limited Early Access
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight px-2 sm:px-0">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 tracking-tight px-2 sm:px-0">
               Get Early Access
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 font-light px-2 sm:px-0">
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 font-light px-2 sm:px-0 mb-8">
               Join the waitlist to be first in line for ElevateU
             </p>
+            
+            {/* Progress indicator */}
+            <ProgressIndicator 
+              steps={formSteps}
+              currentStep={Math.min(currentStep, formSteps.length - 1)}
+              className="mb-8"
+            />
           </div>
           
-          {/* Premium form container - mobile responsive */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-10 border border-white/50 mx-2 sm:mx-0">
+          {/* Enhanced form container */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-10 border border-white/50 mx-2 sm:mx-0 hover:shadow-3xl transition-all duration-500">
             <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-3">
-                  <Label htmlFor="firstName" className="text-slate-700 font-semibold text-base sm:text-lg">
-                    First Name
-                  </Label>
-                  <Input
-                    id="firstName"
+                  <AnimatedInput
+                    label="First Name"
                     type="text"
                     value={state.firstName}
                     onChange={(e) => handleInputChange("firstName", e.target.value)}
-                    className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm touch-manipulation"
-                    placeholder="Enter your first name"
+                    className="transition-all duration-300"
+                    error={validationErrors.firstName}
+                    success={successFields.firstName}
                     required
                   />
                 </div>
@@ -103,7 +175,7 @@ const WaitlistForm = () => {
                     Grade Level
                   </Label>
                   <Select value={state.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)}>
-                    <SelectTrigger className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm">
+                    <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
                     <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl">
@@ -114,30 +186,28 @@ const WaitlistForm = () => {
                       <SelectItem value="college">College Student</SelectItem>
                     </SelectContent>
                   </Select>
+                  {validationErrors.gradeLevel && (
+                    <p className="text-sm text-red-500 animate-fade-in">{validationErrors.gradeLevel}</p>
+                  )}
                 </div>
               </div>
               
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-slate-700 font-semibold text-base sm:text-lg">
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={state.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm touch-manipulation"
-                  placeholder="Enter your email address"
-                  required
-                />
-              </div>
+              <AnimatedInput
+                label="Email Address"
+                type="email"
+                value={state.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                error={validationErrors.email}
+                success={successFields.email}
+                required
+              />
               
               <div className="space-y-3">
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
                 <Select value={state.testType} onValueChange={(value) => handleInputChange("testType", value)}>
-                  <SelectTrigger className="h-12 sm:h-14 rounded-xl sm:rounded-2xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base sm:text-lg bg-white/50 backdrop-blur-sm">
+                  <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
                   <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl">
@@ -147,29 +217,30 @@ const WaitlistForm = () => {
                     <SelectItem value="undecided">Not sure yet</SelectItem>
                   </SelectContent>
                 </Select>
+                {validationErrors.testType && (
+                  <p className="text-sm text-red-500 animate-fade-in">{validationErrors.testType}</p>
+                )}
               </div>
               
-              {/* Premium CTA button - mobile responsive */}
-              <Button 
+              {/* Enhanced CTA button */}
+              <EnhancedButton 
                 type="submit"
-                disabled={state.isLoading}
-                className="w-full h-14 sm:h-16 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl sm:rounded-2xl text-lg sm:text-xl font-semibold shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 group border-0 mt-6 sm:mt-8 touch-manipulation will-change-transform"
+                loading={state.isLoading}
+                variant="gradient"
+                size="xl"
+                className="w-full mt-6 sm:mt-8 group"
+                ripple={true}
               >
-                {state.isLoading ? (
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 border-3 border-white border-t-transparent rounded-full animate-spin mr-3" />
-                    Joining the waitlist...
-                  </div>
-                ) : (
+                {!state.isLoading && (
                   <>
                     👉 Join Now — Get Early Access
                     <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300" />
                   </>
                 )}
-              </Button>
+              </EnhancedButton>
             </form>
             
-            <p className="text-center text-slate-500 mt-6 sm:mt-8 text-base sm:text-lg">
+            <p className="text-center text-slate-500 mt-6 sm:mt-8 text-base">
               By joining, you agree to receive updates about ElevateU. Unsubscribe anytime.
             </p>
           </div>
