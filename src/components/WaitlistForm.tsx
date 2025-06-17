@@ -100,9 +100,17 @@ const WaitlistForm = () => {
   }, [updateField, validateField]);
 
   const handleSelectChange = useCallback((field: string, value: string) => {
+    // Prevent any default behavior
     updateField(field as any, value);
     validateField(field, value);
   }, [updateField, validateField]);
+
+  // Prevent form submission on Enter key in select components
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  }, []);
 
   if (state.isSubmitted) {
     return (
@@ -199,11 +207,17 @@ const WaitlistForm = () => {
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
                     Grade Level
                   </Label>
-                  <Select value={state.gradeLevel} onValueChange={(value) => handleSelectChange("gradeLevel", value)}>
-                    <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
+                  <Select 
+                    value={state.gradeLevel} 
+                    onValueChange={(value) => handleSelectChange("gradeLevel", value)}
+                  >
+                    <SelectTrigger 
+                      className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                      onKeyDown={handleKeyDown}
+                    >
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white backdrop-blur-sm border-slate-200 rounded-xl z-[60]">
+                    <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl z-[9999] shadow-2xl">
                       <SelectItem value="freshman">9th Grade (Freshman)</SelectItem>
                       <SelectItem value="sophomore">10th Grade (Sophomore)</SelectItem>
                       <SelectItem value="junior">11th Grade (Junior)</SelectItem>
@@ -232,11 +246,17 @@ const WaitlistForm = () => {
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
-                <Select value={state.testType} onValueChange={(value) => handleSelectChange("testType", value)}>
-                  <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
+                <Select 
+                  value={state.testType} 
+                  onValueChange={(value) => handleSelectChange("testType", value)}
+                >
+                  <SelectTrigger 
+                    className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                    onKeyDown={handleKeyDown}
+                  >
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white backdrop-blur-sm border-slate-200 rounded-xl z-[60]">
+                  <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl z-[9999] shadow-2xl">
                     <SelectItem value="sat">SAT</SelectItem>
                     <SelectItem value="act">ACT</SelectItem>
                     <SelectItem value="both">Both SAT & ACT</SelectItem>
