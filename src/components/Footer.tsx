@@ -42,7 +42,7 @@ const Footer = () => {
 
         {/* Bottom row: Copyright */}
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p className="text-sm text-gray-500">© 2024 ElevateU. All rights reserved.</p>
+          <p className="text-sm text-gray-500">© 2025 ElevateU. All rights reserved.</p>
         </div>
       </div>
     </footer>;
