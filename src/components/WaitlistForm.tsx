@@ -99,6 +99,11 @@ const WaitlistForm = () => {
     }
   }, [updateField, validateField]);
 
+  const handleSelectChange = useCallback((field: string, value: string) => {
+    updateField(field as any, value);
+    validateField(field, value);
+  }, [updateField, validateField]);
+
   if (state.isSubmitted) {
     return (
       <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
@@ -176,7 +181,7 @@ const WaitlistForm = () => {
           
           {/* Enhanced form container */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-10 border border-white/50 mx-2 sm:mx-0 hover:shadow-3xl transition-all duration-500">
-            <form onSubmit={handleSubmit} action="https://formspree.io/f/xpwrlpqk" method="POST" className="space-y-6 sm:space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <AnimatedInput
                   name="firstName"
@@ -194,11 +199,11 @@ const WaitlistForm = () => {
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
                     Grade Level
                   </Label>
-                  <Select value={state.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)} name="gradeLevel">
+                  <Select value={state.gradeLevel} onValueChange={(value) => handleSelectChange("gradeLevel", value)}>
                     <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl">
+                    <SelectContent className="bg-white backdrop-blur-sm border-slate-200 rounded-xl z-[60]">
                       <SelectItem value="freshman">9th Grade (Freshman)</SelectItem>
                       <SelectItem value="sophomore">10th Grade (Sophomore)</SelectItem>
                       <SelectItem value="junior">11th Grade (Junior)</SelectItem>
@@ -206,8 +211,6 @@ const WaitlistForm = () => {
                       <SelectItem value="college">College Student</SelectItem>
                     </SelectContent>
                   </Select>
-                  {/* Hidden input for Formspree */}
-                  <input type="hidden" name="gradeLevel" value={state.gradeLevel} />
                   {validationErrors.gradeLevel && (
                     <p className="text-sm text-red-500 animate-fade-in">{validationErrors.gradeLevel}</p>
                   )}
@@ -229,19 +232,17 @@ const WaitlistForm = () => {
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
-                <Select value={state.testType} onValueChange={(value) => handleInputChange("testType", value)} name="testType">
+                <Select value={state.testType} onValueChange={(value) => handleSelectChange("testType", value)}>
                   <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl">
+                  <SelectContent className="bg-white backdrop-blur-sm border-slate-200 rounded-xl z-[60]">
                     <SelectItem value="sat">SAT</SelectItem>
                     <SelectItem value="act">ACT</SelectItem>
                     <SelectItem value="both">Both SAT & ACT</SelectItem>
                     <SelectItem value="undecided">Not sure yet</SelectItem>
                   </SelectContent>
                 </Select>
-                {/* Hidden input for Formspree */}
-                <input type="hidden" name="testType" value={state.testType} />
                 {validationErrors.testType && (
                   <p className="text-sm text-red-500 animate-fade-in">{validationErrors.testType}</p>
                 )}
