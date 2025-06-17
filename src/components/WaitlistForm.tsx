@@ -176,21 +176,19 @@ const WaitlistForm = () => {
           
           {/* Enhanced form container */}
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-10 border border-white/50 mx-2 sm:mx-0 hover:shadow-3xl transition-all duration-500">
-            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+            <form onSubmit={handleSubmit} action="https://formspree.io/f/xpwrlpqk" method="POST" className="space-y-6 sm:space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                <div className="space-y-3">
-                  <AnimatedInput
-                    name="firstName"
-                    label="First Name"
-                    type="text"
-                    value={state.firstName}
-                    onChange={(e) => handleInputChange("firstName", e.target.value)}
-                    className="transition-all duration-300"
-                    error={validationErrors.firstName}
-                    success={successFields.firstName}
-                    required
-                  />
-                </div>
+                <AnimatedInput
+                  name="firstName"
+                  label="First Name"
+                  type="text"
+                  value={state.firstName}
+                  onChange={(e) => handleInputChange("firstName", e.target.value)}
+                  className="transition-all duration-300"
+                  error={validationErrors.firstName}
+                  success={successFields.firstName}
+                  required
+                />
                 
                 <div className="space-y-3">
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
