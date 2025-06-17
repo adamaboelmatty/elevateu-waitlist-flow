@@ -1,12 +1,24 @@
+
 import { Instagram, Twitter } from "lucide-react";
+
 const Footer = () => {
-  return <footer className="relative bg-white border-t border-gray-100">
+  const handlePrivacyClick = () => {
+    // Placeholder for privacy policy functionality
+    console.log('Privacy policy clicked');
+  };
+
+  const handleTermsClick = () => {
+    // Placeholder for terms functionality
+    console.log('Terms clicked');
+  };
+
+  return (
+    <footer className="relative bg-white border-t border-gray-100">
       <div className="max-w-6xl mx-auto px-8 py-12">
         {/* Single row layout for desktop, stacked for mobile */}
         <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           {/* Left: Logo and tagline */}
           <div className="flex items-center space-x-4">
-            
             <div>
               <h3 className="text-lg font-semibold text-gray-900">ElevateU</h3>
               <p className="text-sm text-gray-600 font-light">AI-Powered SAT/ACT Prep Built for Gen Z</p>
@@ -34,8 +46,18 @@ const Footer = () => {
               hello@elevateu.app
             </a>
             <div className="flex items-center space-x-4">
-              <a href="#" className="hover:text-gray-700 transition-colors duration-200">Privacy</a>
-              <a href="#" className="hover:text-gray-700 transition-colors duration-200">Terms</a>
+              <button 
+                onClick={handlePrivacyClick}
+                className="hover:text-gray-700 transition-colors duration-200 cursor-pointer"
+              >
+                Privacy
+              </button>
+              <button 
+                onClick={handleTermsClick}
+                className="hover:text-gray-700 transition-colors duration-200 cursor-pointer"
+              >
+                Terms
+              </button>
             </div>
           </div>
         </div>
@@ -45,6 +67,8 @@ const Footer = () => {
           <p className="text-sm text-gray-500">© 2025 ElevateU. All rights reserved.</p>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;

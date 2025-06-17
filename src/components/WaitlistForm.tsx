@@ -99,17 +99,50 @@ const WaitlistForm = () => {
     }
   }, [updateField, validateField]);
 
+  // Enhanced select change handler with proper event handling
   const handleSelectChange = useCallback((field: string, value: string) => {
-    // Prevent any default behavior
+    // Prevent scroll behavior during dropdown interaction
+    const currentScrollY = window.scrollY;
+    
     updateField(field as any, value);
     validateField(field, value);
+    
+    // Restore scroll position if it changed
+    requestAnimationFrame(() => {
+      if (window.scrollY !== currentScrollY) {
+        window.scrollTo(0, currentScrollY);
+      }
+    });
   }, [updateField, validateField]);
 
+  // Prevent dropdown interaction from causing navigation
+  const handleSelectOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      // Temporarily disable any scroll restoration
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+    } else {
+      // Re-enable scroll restoration after dropdown closes
+      setTimeout(() => {
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'auto';
+        }
+      }, 100);
+    }
+  }, []);
+
   // Prevent form submission on Enter key in select components
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+  const handleSelectKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      e.stopPropagation();
     }
+  }, []);
+
+  // Handle click events on select components to prevent event bubbling
+  const handleSelectClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
   }, []);
 
   if (state.isSubmitted) {
@@ -203,21 +236,27 @@ const WaitlistForm = () => {
                   required
                 />
                 
-                <div className="space-y-3">
+                <div className="space-y-3" onClick={handleSelectClick}>
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
                     Grade Level
                   </Label>
                   <Select 
                     value={state.gradeLevel} 
                     onValueChange={(value) => handleSelectChange("gradeLevel", value)}
+                    onOpenChange={handleSelectOpenChange}
                   >
                     <SelectTrigger 
-                      className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
-                      onKeyDown={handleKeyDown}
+                      className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                      onKeyDown={handleSelectKeyDown}
+                      onClick={handleSelectClick}
                     >
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl z-[9999] shadow-2xl">
+                    <SelectContent 
+                      className="bg-white border-slate-200 rounded-xl z-[9999] shadow-2xl"
+                      position="item-aligned"
+                      onClick={handleSelectClick}
+                    >
                       <SelectItem value="freshman">9th Grade (Freshman)</SelectItem>
                       <SelectItem value="sophomore">10th Grade (Sophomore)</SelectItem>
                       <SelectItem value="junior">11th Grade (Junior)</SelectItem>
@@ -242,21 +281,27 @@ const WaitlistForm = () => {
                 required
               />
               
-              <div className="space-y-3">
+              <div className="space-y-3" onClick={handleSelectClick}>
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
                 <Select 
                   value={state.testType} 
                   onValueChange={(value) => handleSelectChange("testType", value)}
+                  onOpenChange={handleSelectOpenChange}
                 >
                   <SelectTrigger 
-                    className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
-                    onKeyDown={handleKeyDown}
+                    className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                    onKeyDown={handleSelectKeyDown}
+                    onClick={handleSelectClick}
                   >
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white/95 backdrop-blur-sm border-slate-200 rounded-xl z-[9999] shadow-2xl">
+                  <SelectContent 
+                    className="bg-white border-slate-200 rounded-xl z-[9999] shadow-2xl"
+                    position="item-aligned"
+                    onClick={handleSelectClick}
+                  >
                     <SelectItem value="sat">SAT</SelectItem>
                     <SelectItem value="act">ACT</SelectItem>
                     <SelectItem value="both">Both SAT & ACT</SelectItem>
