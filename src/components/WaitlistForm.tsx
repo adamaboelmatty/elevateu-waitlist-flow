@@ -233,8 +233,9 @@ const WaitlistForm = () => {
               >
                 {!state.isLoading && (
                   <>
-                    👉 Join Now — Get Early Access
-                    <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                    <span className="hidden sm:inline">👉 Join Now — Get Early Access</span>
+                    <span className="sm:hidden">👉 Join Waitlist</span>
+                    <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300 flex-shrink-0" />
                   </>
                 )}
               </EnhancedButton>

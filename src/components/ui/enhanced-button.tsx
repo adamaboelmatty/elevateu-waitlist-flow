@@ -21,7 +21,7 @@ const enhancedButtonVariants = cva(
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
-        xl: "h-14 rounded-2xl px-12 text-lg",
+        xl: "h-14 rounded-2xl px-8 sm:px-12 text-base sm:text-lg",
         icon: "h-10 w-10",
       },
     },
@@ -98,8 +98,11 @@ const EnhancedButton = React.forwardRef<HTMLButtonElement, EnhancedButtonProps>(
           </div>
         )}
         
-        {/* Content */}
-        <span className={cn("relative z-10 transition-opacity duration-200", loading && "opacity-0")}>
+        {/* Content - enforcing no wrap for inline elements */}
+        <span className={cn(
+          "relative z-10 transition-opacity duration-200 flex items-center gap-2 whitespace-nowrap", 
+          loading && "opacity-0"
+        )}>
           {children}
         </span>
         

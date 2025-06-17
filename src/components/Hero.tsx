@@ -56,11 +56,12 @@ const Hero = memo(() => {
                 onClick={scrollToWaitlist} 
                 variant="gradient"
                 size="xl"
-                className="w-full sm:w-auto min-h-[56px] text-lg sm:text-xl font-medium group"
+                className="w-full sm:w-auto min-h-[56px] group"
                 ripple={true}
               >
-                👉 Join the Waitlist
-                <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                <span className="hidden sm:inline">👉 Join the Waitlist</span>
+                <span className="sm:hidden">👉 Join Waitlist</span>
+                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform duration-300 flex-shrink-0" />
               </EnhancedButton>
             </MagneticButton>
           </div>
