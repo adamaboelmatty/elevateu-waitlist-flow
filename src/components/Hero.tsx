@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 import { FloatingElement, PulsingDot, MagneticButton } from "@/components/ui/floating-elements";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { memo, useCallback } from "react";
 
 const Hero = memo(() => {
@@ -11,13 +12,40 @@ const Hero = memo(() => {
     });
   }, []);
 
+  const studentAvatars = [
+    {
+      src: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=400&fit=crop&crop=face",
+      alt: "Student using laptop",
+      fallback: "AS"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop&crop=face",
+      alt: "Student studying with laptop",
+      fallback: "BS"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=400&fit=crop&crop=face",
+      alt: "Student in study group",
+      fallback: "CS"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=400&fit=crop&crop=face",
+      alt: "Student working at desk",
+      fallback: "DS"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+      alt: "Student preparing for exam",
+      fallback: "ES"
+    }
+  ];
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
       {/* Enhanced background pattern with floating elements */}
       <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(147,51,234,0.01)_50%,transparent_75%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(147,51,234,0.03),transparent_50%)] pointer-events-none" />
       
-      {/* Floating decorative elements */}
       <FloatingElement className="absolute top-20 left-10 opacity-30" delay={0}>
         <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-400 to-blue-500 blur-xl" />
       </FloatingElement>
@@ -36,7 +64,6 @@ const Hero = memo(() => {
             <span className="group-hover:text-purple-800 transition-colors">Now in Beta — Early Access Available</span>
           </div>
           
-          {/* Enhanced typography - mobile responsive */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-bold text-slate-900 mb-6 sm:mb-8 leading-[0.9] tracking-tight animate-fade-in px-2 sm:px-0">
             AI-Powered SAT/ACT Prep —{" "}
             <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent animate-[gradient_3s_ease-in-out_infinite]">
@@ -44,12 +71,10 @@ const Hero = memo(() => {
             </span>
           </h1>
           
-          {/* Refined subheading - mobile responsive */}
           <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-600 mb-12 sm:mb-16 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in px-2 sm:px-0">
             Smarter quizzes. Instant explanations. Frustration-free prep.
           </p>
           
-          {/* Enhanced CTA with magnetic effect - mobile optimized */}
           <div className="animate-fade-in px-4 sm:px-0">
             <MagneticButton>
               <EnhancedButton 
@@ -66,15 +91,22 @@ const Hero = memo(() => {
             </MagneticButton>
           </div>
           
-          {/* Enhanced social proof - mobile responsive */}
           <div className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-slate-500 px-4 sm:px-0">
             <div className="flex -space-x-2 sm:-space-x-3">
-              {[...Array(5)].map((_, i) => (
-                <div 
+              {studentAvatars.map((student, i) => (
+                <Avatar 
                   key={i} 
-                  className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full border-2 border-white shadow-lg hover:scale-110 hover:z-10 transition-all duration-300 cursor-pointer"
+                  className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-white shadow-lg hover:scale-110 hover:z-10 transition-all duration-300 cursor-pointer"
                   style={{ animationDelay: `${i * 0.1}s` }}
-                />
+                >
+                  <AvatarImage 
+                    src={student.src} 
+                    alt={student.alt}
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-purple-400 to-blue-500 text-white text-xs font-medium">
+                    {student.fallback}
+                  </AvatarFallback>
+                </Avatar>
               ))}
             </div>
             <div className="text-sm font-medium text-center sm:text-left">
