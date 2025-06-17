@@ -1,4 +1,3 @@
-
 import { useCallback, useState } from "react";
 import { EnhancedButton } from "@/components/ui/enhanced-button";
 import { AnimatedInput } from "@/components/ui/animated-input";
@@ -55,20 +54,42 @@ const WaitlistForm = () => {
     
     setLoading(true);
     
-    // Simulate API call with progress
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      // Submit to Formspree
+      const formData = new FormData();
+      formData.append('firstName', state.firstName);
+      formData.append('email', state.email);
+      formData.append('gradeLevel', state.gradeLevel);
+      formData.append('testType', state.testType);
+      
+      const response = await fetch('https://formspree.io/f/xpwrlpqk', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        // Create confetti effect
+        const confetti = document.createElement('div');
+        confetti.innerHTML = '🎉'.repeat(20);
+        confetti.className = 'fixed inset-0 pointer-events-none z-50 flex items-center justify-center text-4xl animate-pulse';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => document.body.removeChild(confetti), 2000);
+        
+        setSubmitted(true);
+        toast.success("Welcome to the waitlist! We'll be in touch soon.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error("Something went wrong. Please try again.");
+    }
     
-    // Create confetti effect
-    const confetti = document.createElement('div');
-    confetti.innerHTML = '🎉'.repeat(20);
-    confetti.className = 'fixed inset-0 pointer-events-none z-50 flex items-center justify-center text-4xl animate-pulse';
-    document.body.appendChild(confetti);
-    
-    setTimeout(() => document.body.removeChild(confetti), 2000);
-    
-    setSubmitted(true);
     setLoading(false);
-    toast.success("Welcome to the waitlist! We'll be in touch soon.");
   }, [state, validateField, setLoading, setSubmitted]);
 
   const handleInputChange = useCallback((field: string, value: string) => {
@@ -159,6 +180,7 @@ const WaitlistForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-3">
                   <AnimatedInput
+                    name="firstName"
                     label="First Name"
                     type="text"
                     value={state.firstName}
@@ -174,7 +196,7 @@ const WaitlistForm = () => {
                   <Label htmlFor="gradeLevel" className="text-slate-700 font-semibold text-base sm:text-lg">
                     Grade Level
                   </Label>
-                  <Select value={state.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)}>
+                  <Select value={state.gradeLevel} onValueChange={(value) => handleInputChange("gradeLevel", value)} name="gradeLevel">
                     <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
@@ -186,6 +208,8 @@ const WaitlistForm = () => {
                       <SelectItem value="college">College Student</SelectItem>
                     </SelectContent>
                   </Select>
+                  {/* Hidden input for Formspree */}
+                  <input type="hidden" name="gradeLevel" value={state.gradeLevel} />
                   {validationErrors.gradeLevel && (
                     <p className="text-sm text-red-500 animate-fade-in">{validationErrors.gradeLevel}</p>
                   )}
@@ -193,6 +217,7 @@ const WaitlistForm = () => {
               </div>
               
               <AnimatedInput
+                name="email"
                 label="Email Address"
                 type="email"
                 value={state.email}
@@ -206,7 +231,7 @@ const WaitlistForm = () => {
                 <Label htmlFor="testType" className="text-slate-700 font-semibold text-base sm:text-lg">
                   SAT or ACT?
                 </Label>
-                <Select value={state.testType} onValueChange={(value) => handleInputChange("testType", value)}>
+                <Select value={state.testType} onValueChange={(value) => handleInputChange("testType", value)} name="testType">
                   <SelectTrigger className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-purple-300">
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
@@ -217,6 +242,8 @@ const WaitlistForm = () => {
                     <SelectItem value="undecided">Not sure yet</SelectItem>
                   </SelectContent>
                 </Select>
+                {/* Hidden input for Formspree */}
+                <input type="hidden" name="testType" value={state.testType} />
                 {validationErrors.testType && (
                   <p className="text-sm text-red-500 animate-fade-in">{validationErrors.testType}</p>
                 )}
