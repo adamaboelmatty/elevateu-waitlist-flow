@@ -95,21 +95,12 @@ export default {
 						opacity: '1',
 						transform: 'translateY(0)'
 					}
-				},
-				'float': {
-					'0%, 100%': {
-						transform: 'translateY(0px)'
-					},
-					'50%': {
-						transform: 'translateY(-10px)'
-					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in': 'fade-in 0.6s ease-out',
-				'float': 'float 2s ease-in-out infinite'
+				'fade-in': 'fade-in 0.6s ease-out'
 			},
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -117,12 +108,6 @@ export default {
 			letterSpacing: {
 				tighter: '-0.02em',
 				tight: '-0.01em',
-			},
-			spacing: {
-				'safe-top': 'env(safe-area-inset-top)',
-				'safe-bottom': 'env(safe-area-inset-bottom)',
-				'safe-left': 'env(safe-area-inset-left)',
-				'safe-right': 'env(safe-area-inset-right)',
 			}
 		}
 	},
