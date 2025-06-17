@@ -115,19 +115,27 @@ const WaitlistForm = () => {
     });
   }, [updateField, validateField]);
 
-  // Prevent dropdown interaction from causing navigation
+  // Prevent dropdown interaction from causing navigation - enhanced for mobile
   const handleSelectOpenChange = useCallback((open: boolean) => {
     if (open) {
       // Temporarily disable any scroll restoration
       if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
       }
+      // Prevent body scroll on mobile during dropdown interaction
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
     } else {
       // Re-enable scroll restoration after dropdown closes
       setTimeout(() => {
         if ('scrollRestoration' in history) {
           history.scrollRestoration = 'auto';
         }
+        // Restore body scroll
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
       }, 100);
     }
   }, []);
@@ -147,21 +155,21 @@ const WaitlistForm = () => {
 
   if (state.isSubmitted) {
     return (
-      <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+      <section id="waitlist" className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Enhanced success animation */}
-            <div className="relative mb-8 sm:mb-12">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-[bounce_1s_ease-in-out_3]">
-                <CheckCircle className="h-10 w-10 sm:h-12 sm:w-12 text-white animate-[spin_0.5s_ease-in-out]" />
+            {/* Enhanced success animation - mobile optimized */}
+            <div className="relative mb-8 sm:mb-10 lg:mb-12">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-[bounce_1s_ease-in-out_3]">
+                <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-white animate-[spin_0.5s_ease-in-out]" />
               </div>
-              <div className="absolute inset-0 w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur-xl opacity-30 mx-auto animate-pulse"></div>
+              <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur-xl opacity-30 mx-auto animate-pulse"></div>
               
-              {/* Floating celebration elements */}
+              {/* Floating celebration elements - responsive */}
               {[...Array(6)].map((_, i) => (
                 <div
                   key={i}
-                  className="absolute animate-[float_2s_ease-in-out_infinite] text-2xl"
+                  className="absolute animate-[float_2s_ease-in-out_infinite] text-lg sm:text-xl lg:text-2xl"
                   style={{
                     left: `${20 + i * 15}%`,
                     top: `${10 + (i % 2) * 20}%`,
@@ -173,20 +181,20 @@ const WaitlistForm = () => {
               ))}
             </div>
             
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight px-2 sm:px-0">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight px-2 sm:px-0">
               You're In! 🎉
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 mb-8 sm:mb-12 font-light max-w-2xl mx-auto px-2 sm:px-0">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 mb-8 sm:mb-10 lg:mb-12 font-light max-w-2xl mx-auto px-2 sm:px-0">
               Welcome to the ElevateU waitlist. We'll send you early access as soon as it's ready.
             </p>
             
             {/* Premium success card - mobile responsive */}
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/50 max-w-2xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/50 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4 sm:mb-6">
-                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mr-2 sm:mr-3" />
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900">What's Next?</h3>
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-purple-600 mr-2 sm:mr-3" />
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-900">What's Next?</h3>
               </div>
-              <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
+              <p className="text-slate-700 text-sm sm:text-base lg:text-lg leading-relaxed">
                 Keep an eye on your inbox for <strong>exclusive updates</strong>, study tips, and your <strong>early access invitation</strong>. You're among the first 100 students to join!
               </p>
             </div>
@@ -197,18 +205,18 @@ const WaitlistForm = () => {
   }
 
   return (
-    <section id="waitlist" className="py-20 sm:py-24 md:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+    <section id="waitlist" className="py-16 sm:py-20 md:py-24 lg:py-32 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
-          {/* Enhanced form header with progress */}
-          <div className="text-center mb-12 sm:mb-16">
-            <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-purple-700 text-sm font-medium mb-6 shadow-lg border border-purple-100 animate-fade-in">
+          {/* Enhanced form header with progress - mobile optimized */}
+          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+            <div className="inline-flex items-center px-3 sm:px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-purple-700 text-sm font-medium mb-4 sm:mb-6 shadow-lg border border-purple-100 animate-fade-in">
               🔥 Limited Early Access
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 tracking-tight px-2 sm:px-0">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-4 sm:mb-6 tracking-tight px-2 sm:px-0">
               Get Early Access
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-slate-600 font-light px-2 sm:px-0 mb-8">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 font-light px-2 sm:px-0 mb-6 sm:mb-8">
               Join the waitlist to be first in line for ElevateU
             </p>
             
@@ -216,12 +224,12 @@ const WaitlistForm = () => {
             <ProgressIndicator 
               steps={formSteps}
               currentStep={Math.min(currentStep, formSteps.length - 1)}
-              className="mb-8"
+              className="mb-6 sm:mb-8"
             />
           </div>
           
-          {/* Enhanced form container */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-10 border border-white/50 mx-2 sm:mx-0 hover:shadow-3xl transition-all duration-500">
+          {/* Enhanced form container - mobile optimized */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-10 border border-white/50 mx-2 sm:mx-0 hover:shadow-3xl transition-all duration-500">
             <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <AnimatedInput
@@ -246,22 +254,23 @@ const WaitlistForm = () => {
                     onOpenChange={handleSelectOpenChange}
                   >
                     <SelectTrigger 
-                      className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                      className="h-12 sm:h-14 text-base rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300 touch-manipulation"
                       onKeyDown={handleSelectKeyDown}
                       onClick={handleSelectClick}
                     >
                       <SelectValue placeholder="Select your grade" />
                     </SelectTrigger>
                     <SelectContent 
-                      className="bg-white border-slate-200 rounded-xl z-[9999] shadow-2xl"
+                      className="bg-white border-slate-200 rounded-xl z-[99999] shadow-2xl max-h-[60vh] overflow-y-auto"
                       position="item-aligned"
                       onClick={handleSelectClick}
+                      sideOffset={4}
                     >
-                      <SelectItem value="freshman">9th Grade (Freshman)</SelectItem>
-                      <SelectItem value="sophomore">10th Grade (Sophomore)</SelectItem>
-                      <SelectItem value="junior">11th Grade (Junior)</SelectItem>
-                      <SelectItem value="senior">12th Grade (Senior)</SelectItem>
-                      <SelectItem value="college">College Student</SelectItem>
+                      <SelectItem value="freshman" className="text-base py-3 touch-manipulation">9th Grade (Freshman)</SelectItem>
+                      <SelectItem value="sophomore" className="text-base py-3 touch-manipulation">10th Grade (Sophomore)</SelectItem>
+                      <SelectItem value="junior" className="text-base py-3 touch-manipulation">11th Grade (Junior)</SelectItem>
+                      <SelectItem value="senior" className="text-base py-3 touch-manipulation">12th Grade (Senior)</SelectItem>
+                      <SelectItem value="college" className="text-base py-3 touch-manipulation">College Student</SelectItem>
                     </SelectContent>
                   </Select>
                   {validationErrors.gradeLevel && (
@@ -291,21 +300,22 @@ const WaitlistForm = () => {
                   onOpenChange={handleSelectOpenChange}
                 >
                   <SelectTrigger 
-                    className="h-12 sm:h-12 rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 text-base bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300"
+                    className="h-12 sm:h-14 text-base rounded-xl border-slate-200 focus:border-purple-500 focus:ring-purple-500 bg-white backdrop-blur-sm transition-all duration-300 hover:border-purple-300 touch-manipulation"
                     onKeyDown={handleSelectKeyDown}
                     onClick={handleSelectClick}
                   >
                     <SelectValue placeholder="Choose your test" />
                   </SelectTrigger>
                   <SelectContent 
-                    className="bg-white border-slate-200 rounded-xl z-[9999] shadow-2xl"
+                    className="bg-white border-slate-200 rounded-xl z-[99999] shadow-2xl max-h-[60vh] overflow-y-auto"
                     position="item-aligned"
                     onClick={handleSelectClick}
+                    sideOffset={4}
                   >
-                    <SelectItem value="sat">SAT</SelectItem>
-                    <SelectItem value="act">ACT</SelectItem>
-                    <SelectItem value="both">Both SAT & ACT</SelectItem>
-                    <SelectItem value="undecided">Not sure yet</SelectItem>
+                    <SelectItem value="sat" className="text-base py-3 touch-manipulation">SAT</SelectItem>
+                    <SelectItem value="act" className="text-base py-3 touch-manipulation">ACT</SelectItem>
+                    <SelectItem value="both" className="text-base py-3 touch-manipulation">Both SAT & ACT</SelectItem>
+                    <SelectItem value="undecided" className="text-base py-3 touch-manipulation">Not sure yet</SelectItem>
                   </SelectContent>
                 </Select>
                 {validationErrors.testType && (
@@ -313,13 +323,13 @@ const WaitlistForm = () => {
                 )}
               </div>
               
-              {/* Enhanced CTA button */}
+              {/* Enhanced CTA button - mobile optimized */}
               <EnhancedButton 
                 type="submit"
                 loading={state.isLoading}
                 variant="gradient"
                 size="xl"
-                className="w-full mt-6 sm:mt-8 group"
+                className="w-full mt-6 sm:mt-8 group min-h-[56px] text-base sm:text-lg touch-manipulation"
                 ripple={true}
               >
                 {!state.isLoading && (
@@ -332,7 +342,7 @@ const WaitlistForm = () => {
               </EnhancedButton>
             </form>
             
-            <p className="text-center text-slate-500 mt-6 sm:mt-8 text-base">
+            <p className="text-center text-slate-500 mt-6 sm:mt-8 text-sm sm:text-base leading-relaxed px-2">
               By joining, you agree to receive updates about ElevateU. Unsubscribe anytime.
             </p>
           </div>
